@@ -1,0 +1,80 @@
+#%RAML 1.0
+baseUri: https://api.spacexdata.com/v4
+title: spaceX-system-api
+version: v1
+description: implementation of Launchpads and Cores resources
+
+annotationTypes:
+  authRequired:
+    type: boolean
+    description: Add authentification to the endpoint
+
+traits: 
+  common: !include traits/commonTraits.raml
+  standard-error-response: !include traits/errorResponse.raml
+
+types:
+  launchpad: !include datatypes/launchpadDataType.raml
+  core: !include datatypes/coreDataType.raml
+
+/launchpads:
+  get:
+    is: [common, standard-error-response]
+    (authRequired): false
+    displayName: Get all launchpads
+    description: Retrives all launchpads
+    responses:
+      200:
+        body:
+            application/json:
+              type: launchpad[]
+              examples: 
+                output: !include examples/launchpadsResponse.json
+  /{id}:
+    uriParameters:
+      id:
+        description: id is the ID of the launchpad
+        type: string
+    get:
+      is: [common, standard-error-response]
+      (authRequired): false
+      displayName: Get one launchpad
+      description: Retrives one launchpad based on id
+      responses:
+        200:
+          body:
+            application/json:
+              type: launchpad
+              examples: 
+                output: !include examples/launchpadExample.json
+
+/cores:
+  get:
+    is: [common, standard-error-response]
+    (authRequired): false
+    displayName: Get all cores
+    description: Retrieves all cores
+    responses:
+      200:
+        body:
+            application/json:
+              type: core[]
+              examples: 
+                output: !include examples/coresResponse.json
+  /{id}:
+    uriParameters:
+      id:
+        description: id is the ID of the core
+        type: string
+    get:
+      is: [common, standard-error-response]
+      (authRequired): false
+      displayName: Get one core
+      description: Retrieves one core based on id
+      responses:
+        200:
+          body:
+            application/json:
+              type: core
+              examples: 
+                output: !include examples/coreExample.json
